@@ -1,0 +1,8 @@
+# My secrets (API key, database password) live here. NEVER commit this file.
+.env
+.env.*
+!.env.example
+
+node_modules/
+npm-debug.log*
+.DS_Store

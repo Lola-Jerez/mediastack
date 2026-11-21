@@ -1,0 +1,20 @@
+{
+  "name": "mediastack-news",
+  "version": "1.0.0",
+  "description": "My importer that fetches news from the mediastack API and stores it in PostgreSQL",
+  "type": "module",
+  "main": "src/import.js",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "import": "node src/import.js",
+    "db:up": "docker compose up -d",
+    "db:down": "docker compose down",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "dotenv": "^18.0.10",
+    "pg": "^8.23.1"
+  }
+}

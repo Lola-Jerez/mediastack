@@ -1,0 +1,28 @@
+# My local PostgreSQL database.
+# Docker Compose reads the values like ${POSTGRES_PASSWORD} from my .env file,
+# so no password is ever written in this file.
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: mediastack-news-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      # I only bind to 127.0.0.1 so the database isn't reachable from my network.
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      # My data survives "docker compose down" because it lives in this volume.
+      - pgdata:/var/lib/postgresql/data
+      # On the very first start, Postgres runs this file and creates my table.
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  pgdata:
