@@ -1,6 +1,6 @@
-# My mediastack News Importer
+# Mediastack News Importer
 
-I built this to fetch news articles from the [mediastack API](https://mediastack.com/) (I found it on [public-apis](https://github.com/public-apis/public-apis)), clean them up into my own data model, and save them in a PostgreSQL database that runs in Docker.
+Fetches news articles from the [mediastack API](https://mediastack.com/) (I found it on [public-apis](https://github.com/public-apis/public-apis)), clean them up into my own data model, and save them in a PostgreSQL database that runs in Docker.
 
 ## How my code is organized
 
@@ -65,11 +65,11 @@ docker exec -it mediastack-news-db psql -U news_user -d news -c "SELECT title, s
 
 | Problem | Do I retry? |
 |---|---|
-| Timeout / network error | ✅ yes |
-| HTTP 5xx (server error) | ✅ yes |
-| HTTP 429 `rate_limit_reached` (too many requests) | ✅ yes |
-| HTTP 429 `usage_limit_reached` (monthly quota gone) | ❌ no, retrying wastes time |
-| Wrong/missing API key, feature not in my plan | ❌ no, I need to fix it myself |
+| Timeout / network error | yes |
+| HTTP 5xx (server error) | yes |
+| HTTP 429 `rate_limit_reached` (too many requests) | yes |
+| HTTP 429 `usage_limit_reached` (monthly quota gone) | no, retrying wastes time |
+| Wrong/missing API key, feature not in my plan |  no, I need to fix it myself |
 
 I wait longer between each retry (≈1s, 2s, 4s) plus a little random "jitter". If the API sends a `Retry-After` header, I wait that long instead. I retry 3 times at most.
 
